@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { SafeAreaView, View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 
 import api from '../services/api';
+import RequireId from './id';
 
 import logo from '../assets/logo.png';
 import like from '../assets/like.png';
@@ -12,9 +13,14 @@ import itsamatch from '../assets/itsamatch.png';
 
 
 export default function Main({ navigation }) {
+
+
     const id = navigation.getParam('user');
     const [users, setUsers] = useState([]);
     const [matchDev, setMatchDev] = useState(null);
+    const [auth, setAuth] = useState(false)
+
+    
 
     useEffect(() => {
         async function loadUsers() {
@@ -65,6 +71,9 @@ export default function Main({ navigation }) {
         navigation.navigate('Login');
     }
 
+    if (!auth) {
+       return (<RequireId handlePopupDismissed={() => setAuth(true)} />)
+    } else {
     return (
         <SafeAreaView style={styles.container}>
             <TouchableOpacity onPress={handleLogout}>
@@ -112,6 +121,7 @@ export default function Main({ navigation }) {
             )}
         </SafeAreaView>
     )
+}
 }
 
 const styles = StyleSheet.create({
